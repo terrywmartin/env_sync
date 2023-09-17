@@ -7,7 +7,7 @@ import os
 
 def get_email_connection():
  use_tls = True
- use_ssl = False
+ use_ssl = True
  fail_silently=False
  connection = get_connection(host=settings.EMAIL_HOST, 
                         port=settings.EMAIL_PORT, 
@@ -26,7 +26,7 @@ def email_user(email_address, html, subject=None):
     success = { 'result': 0, 'message': ''}
     try:
             if not subject:
-                subject = "Secret Share Invitation"
+                subject = "Activate User"
             connection = get_email_connection()
             email = EmailMessage(subject,html, from_email, [email_address],connection=connection)
             email.content_subtype = 'html'

@@ -59,7 +59,7 @@ class UsersRegisterUser(View):
             user.save()
             user.send_activation()
             messages.success(request, "User activation email has been sent.")
-            messages.success(request, "Your account has been created.")
+            
         else:
             messages.error(request,'Error in form validation.')
             context = {
