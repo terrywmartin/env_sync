@@ -20,11 +20,11 @@
   <div class="content bg-light {% if user.is_authenticated == False %}open{% endif %}">
   {% block navbar %}{% endblock %}
       
-    <section class="section">
+    {% comment %} <section class="section"> {% endcomment %}
      {% include 'partials/messages.html' %}
               
       {% block content %}{% endblock %}
-    </section>
+    {% comment %} </section> {% endcomment %}
   </div>
 
 </div>       
