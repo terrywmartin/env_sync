@@ -5,7 +5,7 @@ from users.models import User
 import uuid
 
 # Create your models here.
-class APIKeys(models.Model):
+class APIKey(models.Model):
     id = models.UUIDField(primary_key=True,unique=True,editable=False,default=uuid.uuid4())
     name = models.CharField(max_length=50,null=False,blank=False)
     hash = models.TextField(null=False,blank=False)
