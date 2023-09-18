@@ -24,5 +24,6 @@ urlpatterns = [
     
     path('', include('core.urls', namespace='core')),
     path('users/', include('users.urls', namespace='users')),
-    
+    path('config-files/', include('configfiles.urls', namespace='configfiles')),
+    path('api-keys/', include('apikeys.urls', namespace='apikeys')),
 ]

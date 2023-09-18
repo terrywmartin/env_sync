@@ -46,6 +46,8 @@ INSTALLED_APPS = [
     'django_htmx',
     'core.apps.CoreConfig',
     'users.apps.UsersConfig',
+    'configfiles.apps.ConfigfilesConfig',
+    'apikeys.apps.ApikeysConfig',
     'storages',
 ]
 
