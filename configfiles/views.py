@@ -18,13 +18,14 @@ class ConfigFilesLocations(View):
     def get(self, request):
         
         locations = Location.objects.filter(user=request.user)
-        
+        form = LocationModelForm()
         context = {
             'model_name': 'Location',
             #'create_view': 'configfiles:create_location',
-            'create_view': 'configfiles:show_modal',
+            'create_view': 'configfiles:add_location',
             'modal_target': 'location_modal',
-            'locations': locations
+            'locations': locations,
+            'form': form
         }
         return render(request, 'configfiles/view_locations.html', context)
     
@@ -122,7 +123,14 @@ def add_location(request):
     
     if request.user == None:
         return Http404
-    
+    print("add location")
+    form = LocationModelForm(request.POST)
+    if form.is_valid():
+
+        location = form.save(commit=False)
+        location.user = request.user
+        form.save()
+
     locations = Location.objects.filter(user=request.user)
     context = {
         'locations': locations

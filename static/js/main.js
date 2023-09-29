@@ -23,3 +23,6 @@
     
 })(jQuery);
 
+$('#location-save').click(function() {
+    $('#exampleModal').modal('hide');
+ });

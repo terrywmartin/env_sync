@@ -23,12 +23,36 @@
             </div>
         </div>
 
-        <div id="location_modal" class="modal fade">
-            <div id="dialog" class="modal-dialog" hx-target="this"></div>
-        
-        </div>
-        <!-- Content End -->
 
-    <script defer > 
-</script>
+<!-- Modal -->
+<div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="exampleModalLabel">Modal title</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+        <form class="row g-3 align-middle" hx-post="{% url 'configfiles:add_location' %}" hx-target="#location-list">
+   
+            {% for field in form %}
+            <div class="col-md-7 mb-3 align-middle" >
+                {{ field.label }}
+                {{ field }}
+            </div>
+            {% endfor %}
+            
+            </div>
+
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                <button id="location-save" type="submit" class="btn btn-primary" data-dismiss="modal">Save changes</button>
+            </div>
+        </form>
+
+      
+    </div>
+  </div>
+</div>        <!-- Content End -->
 {% endblock %}
+
