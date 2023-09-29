@@ -6,13 +6,13 @@ from django.utils.encoding import force_bytes
 from django.contrib.auth.tokens import default_token_generator
 from django.conf import settings
 
-
 from core.utils import email_user
 from core.tasks import email_user
 
 import uuid
 
 from core.storage_backends import PublicMediaStorage
+
 
 # Create your models here.
 class User(AbstractUser):

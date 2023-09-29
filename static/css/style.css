@@ -1,3 +1,21 @@
+/**** Custom CSS ****/
+.actions-buttons-right  {
+    /* padding-bottom: 10px; */
+    width: auto !important;
+}
+
+.action-buttons a {
+    margin-left: 10px;
+    margin-bottom: 15px;
+     
+ }
+ .action-buttons span {
+    margin-left: 10px;
+    margin-bottom: 5px;
+ }
+
+
+
 /********** Template CSS **********/
 :root {
     --primary: #009CFF;
