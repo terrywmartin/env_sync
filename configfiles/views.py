@@ -1,6 +1,6 @@
 from django.shortcuts import render, redirect
 from django.views import View
-from django.http import Http404
+from django.http import Http404, HttpResponse
 
 from .forms import LocationModelForm
 from .models import Location
@@ -28,30 +28,12 @@ class ConfigFilesLocations(View):
             'input_name': 'location_name',
             'placeholder_text': 'Enter a location',
             'button_text': 'Add location',
-            'locations': locations,
+            #'locations': locations,
             'form': form
         }
         return render(request, 'configfiles/view_locations.html', context)
     
-    def post(self, request, pk):
-
-        context = {
-
-        }
-        #return redirect('configfiles:view_create_locations')    
-        return redirect('configfiles:view_locations')
-
-class ConfigFilesCreateLocation(View):
-    def get(self, request):
-
-        location_form = LocationModelForm()
-        context = {
-            'form': location_form
-
-        }
-        print('create location')
-        return render(request, 'configfiles/create_location.html', context)
-
+ 
 class ConfigFilesLocation(View):
     def get(self, request, pk):
 
@@ -64,14 +46,6 @@ class ConfigFilesLocation(View):
             
         }
         return render(request, 'configfiles/view_location.html', context)
-    
-    def delete(self, request, pk):
-
-        return redirect('configfiles:view_locations')
-    
-    def post(self, request, pk):
-
-        return redirect('configfiles:view_locations')
     
 def get_locations(request):
     if request.htmx == False:
@@ -98,28 +72,8 @@ def delete_location(request,pk):
     location = Location.objects.get(id=pk)
     location.delete()
 
-    locations = Location.objects.filter(user=request.user)
-    context = {
-        'locations': locations
-    }
-
-    return render(request, 'configfiles/partials/location_list.html', context)
-
-def show_location_form(request):
-    if request.htmx == False:
-        return Http404
-    
-    if request.user == None:
-        return Http404
-    print('show location')
-    location_form = LocationModelForm()
-    context = {
-        'form': location_form,
-        'add_location': 'configfiles:add_location',
-
-    }
-
-    return render(request, 'configfiles/partials/location_form.html', context)
+    #return render(request, 'configfiles/partials/location_list.html', context)
+    return HttpResponse(status=204, headers={'HX-Trigger': 'locationListChanged'})
     
 def add_location(request):
     if request.htmx == False:
@@ -127,23 +81,11 @@ def add_location(request):
     
     if request.user == None:
         return Http404
-    print("add location")
-    print(request.POST)
+    
     location_name = request.POST.get('location_name', None)
     if location_name != None:
         location = Location(name=location_name, user=request.user)
-        print(location)
         location.save()
-    '''
-        form = LocationModelForm(request.POST)
-        if form.is_valid():
-        location = form.save(commit=False)
-        location.user = request.user
-        form.save()
-    '''
-
-    locations = Location.objects.filter(user=request.user)
-    context = {
-        'locations': locations
-    }
-    return render(request, 'configfiles/partials/location_list.html', context)
+    
+     #return render(request, 'configfiles/partials/location_list.html', context)
+    return HttpResponse(status=201, headers={'HX-Trigger': 'locationListChanged'})
