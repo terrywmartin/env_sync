@@ -1,4 +1,5 @@
 from django.db import models
+from django.db.models.functions import Lower
 
 from users.models import User
 from apikeys.models import APIKey
@@ -21,6 +22,9 @@ class Location(models.Model):
     id = models.UUIDField(primary_key=True,unique=True,editable=False,default=uuid.uuid4)
     name = models.CharField(max_length=100,null=False,blank=False)
     user = models.ForeignKey(User,on_delete=models.CASCADE,null=True,blank=False)
+
+    class Meta:
+        ordering = [ Lower('name') ]
 
     def __str__(self):
         return self.name

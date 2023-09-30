@@ -23,3 +23,10 @@
     
 })(jQuery);
 
+ htmx.on("htmx:afterSwap", (e) => {
+    // Response targeting #dialog => show the modal
+    if (e.detail.target.id == "location-list") {
+      document.getElementById("locationForm").reset()
+      document.getElementById("formInput1").focus()
+    }
+  })

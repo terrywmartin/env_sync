@@ -15,8 +15,9 @@ urlpatterns = [
 
     path('<int:pk>/change_password/', views.change_password, name='change_password'),
 
-    path('<int:pk>/short_bio/', views.UsersViewShortIntro.as_view(), name='view_short_intro'),
-    path('<int:pk>/short_bio/edit', views.UsersEditShortIntro.as_view(), name='edit_short_intro'),
+    path('settings/', views.UsersSettings.as_view(), name='update_settings')
+    #path('<int:pk>/short_bio/', views.UsersViewShortIntro.as_view(), name='view_short_intro'),
+    #path('<int:pk>/short_bio/edit', views.UsersEditShortIntro.as_view(), name='edit_short_intro'),
     
     
 ]

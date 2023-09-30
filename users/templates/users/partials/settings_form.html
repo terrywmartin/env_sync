@@ -1,0 +1,21 @@
+{% if msg != '' %}
+{% include 'users/partials/message.html' %}
+{% endif %}
+<form  hx-put="{% url 'users:update_settings' %}" hx-target="#settingsForm">
+    {% csrf_token %}
+    <div class="form-outline mb-4">
+        {% for field in form %}
+        <div class="col-12">
+            {{ field.label }}
+            {{ field }}
+            {{ field.errors }}
+        </div>
+        {% endfor %}
+    </div>
+    
+    <br>
+
+    <button type="submit"  class="btn btn-primary btn-block mb-4">Save</button>
+
+    
+</form>

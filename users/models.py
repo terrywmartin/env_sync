@@ -45,3 +45,13 @@ class User(AbstractUser):
       #response = email_user.delay(self.email, html, subject='Reset Password')
       response = email_user(self.email, html, subject='Reset Password')
       
+class UserSettings(models.Model):
+   confirm_delete = models.BooleanField(null=False, blank=False, default = True)
+
+   user = models.OneToOneField(User, blank=True, null=True, on_delete=models.CASCADE)
+
+   class Meta:
+      verbose_name_plural = "User settings"
+
+   def __str__(self):
+      return self.user.username + ' - Settings' 

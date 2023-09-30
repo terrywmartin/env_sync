@@ -6,15 +6,15 @@ from django.utils.http import urlsafe_base64_decode
 from django.contrib.auth.tokens import default_token_generator
 from django.contrib.auth.hashers import make_password, check_password
 from django.contrib.auth.password_validation import validate_password
-from django.http import Http404, HttpResponse
+from django.http import Http404, HttpResponse, QueryDict
 from django.urls import reverse
 from django.db.models import Q
 
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.mixins import LoginRequiredMixin, PermissionRequiredMixin
 
-from .forms import RegisterUserForm, UserModelForm
-from .models import User
+from .forms import RegisterUserForm, UserModelForm, UserSettingsForm
+from .models import User, UserSettings
 from .utils import paginate_users
 
 # Create your views here.
@@ -30,10 +30,8 @@ class UsersRegisterUser(View):
 
 
     def post(self, request):
-        print(request.POST)
         form = RegisterUserForm(request.POST)
         if form.is_valid():
-            print('Checking User...')
             username = form.cleaned_data['username']
             found = True
             try:
@@ -155,7 +153,6 @@ class UsersForgotPassword(View):
 
 class UsersSearch(View):
     def get(self, request):
-        print(request.GET)
 
         search_query = ''
 
@@ -174,6 +171,48 @@ class UsersSearch(View):
         }
         return render(request, 'users/search.html', context)
     
+class UsersSettings(View):
+    def get(self, request):
+        try:
+            user = User.objects.get(id=request.user.id)
+            form = UserSettingsForm(instance=user.usersettings)
+            context = {
+                'form' : form,
+                'msg': '',
+                'status': ''
+            }
+
+            return render(request, 'users/user_settings.html', context)
+        except:
+            messages.error(request, "Cannot load settings.")
+            return redirect('core:index')
+        
+    def put(self, request):
+        try:
+            user = User.objects.get(id=request.user.id)
+            user_settings = UserSettings.objects.get(id=user.usersettings.id)
+            body = QueryDict(request.body)
+            
+            form = UserSettingsForm(body, instance=user_settings)
+            if form.is_valid():
+                form.save()
+                context = { 
+                            'form': form,
+                            'msg': 'Saved.',
+                            'status': 'ok'
+                        }
+                return render(request, 'users/partials/settings_form.html', context)
+        except Exception as e:
+            user = User.objects.get(id=request.user.id)
+            form = UserSettingsForm(instance=user.usersettings)
+            context = {
+                'form': form,
+                'msg': e,
+                'status': 'error'
+            }
+            return render(request, 'users/partials/settings_form.html', context)
+
+
 class UsersViewProfile(View):
     def get(self, request, pk):
         try:
@@ -247,12 +286,10 @@ def change_password(request, pk):
         'tab': 99
     }
     if request.method == "POST":
-        print(request.POST)
         # check password with current password
         password = request.POST['password']
        
         try:
-            print(user.password)
             password_match = check_password(password, user.password)
         except:
             messages.error(request, "Current password is incorrect.")
