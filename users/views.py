@@ -171,7 +171,7 @@ class UsersSearch(View):
         }
         return render(request, 'users/search.html', context)
     
-class UsersSettings(View):
+class UsersSettings(LoginRequiredMixin, View):
     def get(self, request):
         try:
             user = User.objects.get(id=request.user.id)

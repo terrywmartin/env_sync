@@ -1,20 +1,23 @@
 from django.shortcuts import render, redirect
 from django.views import View
 from django.http import Http404, HttpResponse
+from django.contrib.auth.decorators import login_required
+from django.contrib.auth.mixins import LoginRequiredMixin, PermissionRequiredMixin
 
 from .forms import LocationModelForm
 from .models import Location
 from users.models import User
 
 # Create your views here.
+""" 
 class Index(View):
     def get(self, request):
         
         context = {
         }
         return render(request, 'configfiles/index.html', context)
-
-class ConfigFilesLocations(View):
+ """
+class ConfigFilesLocations(LoginRequiredMixin, View):
     def get(self, request):
         
         locations = Location.objects.filter(user=request.user)
@@ -34,7 +37,7 @@ class ConfigFilesLocations(View):
         return render(request, 'configfiles/view_locations.html', context)
     
  
-class ConfigFilesLocation(View):
+class ConfigFilesLocation(LoginRequiredMixin, View):
     def get(self, request, pk):
 
         mode = request.GET.get('mode', None)
@@ -46,7 +49,8 @@ class ConfigFilesLocation(View):
             
         }
         return render(request, 'configfiles/view_location.html', context)
-    
+
+@login_required(login_url='login') 
 def get_locations(request):
     if request.htmx == False:
         return Http404
@@ -60,7 +64,8 @@ def get_locations(request):
         'locations': locations
     }
     return render(request, 'configfiles\partials\location_list.html', context)
-    
+
+@login_required(login_url='login')  
 def delete_location(request,pk):
     
     if request.htmx == False:
@@ -74,7 +79,8 @@ def delete_location(request,pk):
 
     #return render(request, 'configfiles/partials/location_list.html', context)
     return HttpResponse(status=204, headers={'HX-Trigger': 'locationListChanged'})
-    
+
+@login_required(login_url='login')
 def add_location(request):
     if request.htmx == False:
         return Http404

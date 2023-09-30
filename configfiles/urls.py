@@ -6,7 +6,7 @@ from . import views
 app_name = 'configfiles'
 
 urlpatterns = [
-    path('', views.Index.as_view(), name='index'),
+    #path('', views.Index.as_view(), name='index'),
     path('locations/', views.ConfigFilesLocations.as_view(), name='view_locations'),
     path('locations/get', views.get_locations, name='get_locations'),
     path('locations/create', views.add_location, name='add_location'),
