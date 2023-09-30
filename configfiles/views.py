@@ -24,6 +24,10 @@ class ConfigFilesLocations(View):
             #'create_view': 'configfiles:create_location',
             'create_view': 'configfiles:add_location',
             'modal_target': 'location_modal',
+            'list_target': '#location-list',
+            'input_name': 'location_name',
+            'placeholder_text': 'Enter a location',
+            'button_text': 'Add location',
             'locations': locations,
             'form': form
         }
@@ -124,12 +128,19 @@ def add_location(request):
     if request.user == None:
         return Http404
     print("add location")
-    form = LocationModelForm(request.POST)
-    if form.is_valid():
-
+    print(request.POST)
+    location_name = request.POST.get('location_name', None)
+    if location_name != None:
+        location = Location(name=location_name, user=request.user)
+        print(location)
+        location.save()
+    '''
+        form = LocationModelForm(request.POST)
+        if form.is_valid():
         location = form.save(commit=False)
         location.user = request.user
         form.save()
+    '''
 
     locations = Location.objects.filter(user=request.user)
     context = {

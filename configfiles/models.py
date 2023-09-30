@@ -6,7 +6,7 @@ import uuid
 
 # Create your models here.
 class ConfigFile(models.Model):
-    id = models.UUIDField(primary_key=True,unique=True,editable=False,default=uuid.uuid4())
+    id = models.UUIDField(primary_key=True,unique=True,editable=False,default=uuid.uuid4)
     name = models.CharField(max_length=100,null=False,blank=False)
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
@@ -18,7 +18,7 @@ class ConfigFile(models.Model):
 
 
 class Location(models.Model):
-    id = models.UUIDField(primary_key=True,unique=True,editable=False,default=uuid.uuid4())
+    id = models.UUIDField(primary_key=True,unique=True,editable=False,default=uuid.uuid4)
     name = models.CharField(max_length=100,null=False,blank=False)
     user = models.ForeignKey(User,on_delete=models.CASCADE,null=True,blank=False)
 
@@ -26,7 +26,7 @@ class Location(models.Model):
         return self.name
     
 class File(models.Model):
-    id = models.UUIDField(primary_key=True,unique=True,editable=False,default=uuid.uuid4())
+    id = models.UUIDField(primary_key=True,unique=True,editable=False,default=uuid.uuid4)
     name = models.CharField(max_length=100,null=False,blank=False)
     path = models.CharField(max_length=250, null=False,blank=False)
     environment = models.CharField(max_length=20,null=True,blank=True)

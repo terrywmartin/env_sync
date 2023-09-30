@@ -1,6 +1,21 @@
+{% comment %}
 <div class="action-buttons">
-    {% comment %} <a href="{% url create_view %}" class="btn btn-primary"><i class="fa-solid fa-plus"></i> Add {{model_name}}</a>  {% endcomment %}
     <a href="{% url create_view %}" data-bs-toggle="modal" data-bs-target="#{{ modal_target }}" class="btn btn-primary"><i class="fa-solid fa-plus"></i> Add {{model_name}}</a> 
-
+</div>
+{% endcomment %}
+<div class="action-buttons align-items-center">
+    <form class="row align-items-center" >
+        {% csrf_token %}
+        <div class="col-7 col-sm-7 col-md-5 col-lg-5">
+            <input type="text" name={{ input_name }} class="form-control mr-2" placeholder="{{placeholder_text}}" /> 
+        </div>
+        <div class="col-5 col-sm-5 col-md-5 col-md-7">
+            <button hx-post="{% url create_view %}" hx-target="{{ list_target }}" type="submit" class="btn btn-primary btn-sm">{{ button_text }}</button>
+        </div>
+        {% comment %}
+        <a href="{% url create_view %}" class="btn btn-primary"><i class="fa-solid fa-plus"></i> Add {{model_name}}</a> 
+        <a href="{% url create_view %}" data-bs-toggle="modal" data-bs-target="#{{ modal_target }}" class="btn btn-primary"><i class="fa-solid fa-plus"></i> Add {{model_name}}</a> 
+        {% endcomment %}
+    </form>
 
 </div>

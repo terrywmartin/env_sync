@@ -6,7 +6,7 @@ import uuid
 
 # Create your models here.
 class APIKey(models.Model):
-    id = models.UUIDField(primary_key=True,unique=True,editable=False,default=uuid.uuid4())
+    id = models.UUIDField(primary_key=True,unique=True,editable=False,default=uuid.uuid4)
     name = models.CharField(max_length=50,null=False,blank=False)
     hash = models.TextField(null=False,blank=False)
     prefix = models.CharField(max_length=10,null=False,blank=False)
