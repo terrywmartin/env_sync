@@ -1,8 +1,8 @@
-{% comment %}
+{% if add_form == False %}
 <div class="action-buttons">
     <a href="{% url create_view %}" data-bs-toggle="modal" data-bs-target="#{{ modal_target }}" class="btn btn-primary"><i class="fa-solid fa-plus"></i> Add {{model_name}}</a> 
 </div>
-{% endcomment %}
+{% else %}
 <div class="action-buttons align-items-center">
     <form id="locationForm" class="row align-items-center" hx-post="{% url create_view %}" hx-target="{{ list_target }}">
         {% csrf_token %}
@@ -19,3 +19,4 @@
     </form>
 
 </div>
+{% endif %}

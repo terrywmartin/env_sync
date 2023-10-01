@@ -14,7 +14,7 @@
             <!-- Sale & Revenue End -->
 
         <div class="col-12">
-            <div class="bg-light rounded h-100 p-4">
+            <div class="bg-light rounded h-100 p-4" id="location-main">
                 <h6 class="mb-4">Locations</h6>
                 {% include 'partials\add_action_buttons.html'  %}
                 <div id="location-list" class="table-responsive" hx-trigger="load, locationListChanged from:body" hx-get="{% url 'configfiles:get_locations' %}" hx-target="this" >

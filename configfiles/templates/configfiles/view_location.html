@@ -16,7 +16,13 @@
         <div class="col-12">
             <div class="bg-light rounded h-100 p-4">
                 <h6 class="mb-4">Location</h6>
-                    <h3>Mode = {{ mode }}
+                    <h3>{{ location.name }}
+                    <br><br>
+                    <h4>Files</h4>
+                    <br>
+                    <div id="file-list" class="table-responsive" hx-trigger="load, fileListChanged from:body" hx-get="{% url 'configfiles:get_location_files' location_id=location.id %}" hx-target="this" >
+                    {% include 'configfiles/partials/file_list.html' %}
+                    </div>
                 </div>
             </div>
         </div>

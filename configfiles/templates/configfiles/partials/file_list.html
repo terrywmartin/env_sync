@@ -1,0 +1,16 @@
+<table class="table ">
+    <thead>
+        <tr>
+            
+            <th scope="col">File Name</th>
+            <th scope="col">Environment</th>
+            <th scope="col"></th>
+            
+        </tr>
+    </thead>
+    <tbody>
+        {% for file in files %}
+        {% include 'configfiles/partials/file_item.html' with location_id=location.id file_id=file.id %}
+        {% endfor %}
+    </tbody>
+</table>
