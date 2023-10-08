@@ -23,7 +23,7 @@
                         {% url 'configfiles:view_files' as files_url %}
                         <a href="#" class="nav-link dropdown-toggle {% if locations_url in request.get_full_path or projects_url in request.get_full_path or files_url in request.get_full_path  %}show{% endif %}" data-bs-toggle="dropdown"><i class="fa fa-gears me-2"></i>Config Files</a>
                         <div class="dropdown-menu bg-transparent border-0 {% if locations_url in request.get_full_path or projects_url in request.get_full_path or files_url in request.get_full_path %}show{% endif %}">
-                            <a href={% url 'configfiles:view_projects' %} class="dropdown-item"><i class="fa-solid fa-diagram-project me-2"></i>Projects</a>
+                            <a href={% url 'configfiles:view_projects' %} class="dropdown-item"><i class="fa-solid fa-code-branch me-2"></i>Projects</a>
                             <a href={% url 'configfiles:view_locations' %} class="dropdown-item"><i class="fa fa-laptop me-2"></i>Locations</a>
                             <a href={% url 'configfiles:view_files' %} class="dropdown-item"><i class="fa fa-file-code me-2"></i>Files</a>
                         </div>
