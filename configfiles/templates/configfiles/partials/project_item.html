@@ -1,0 +1,12 @@
+<div >
+
+    <tr style="border-style: none !important;">
+        <th style="border-style: none !important;" scope="row"></th>
+        <td style="border-style: none !important;" class = 'align-middle'>{{ col1 }}</td>
+        <td style="border-style: none !important;" class = 'align-middle'>{{ col2 }}</td>
+        <td style="border-style: none !important;" class = 'align-middle'>{{ col3 }}</td>
+        <td style="border-style: none !important;" class = 'align-middle'>{{ col4 }}</td>
+        <td style="border-style: none !important;" class = 'align-middle'>{{ col5 }}</td>
+        <td style="border-style: none !important;" class = 'align-middle text-right float-end' ><div class="btn-group" role="group"><a href="{% url 'configfiles:view_project' pk=item_id %}" type="button" class="btn btn-outline-secondary btn-sm">View</a><a href="{% url 'configfiles:view_project' pk=item_id %}?mode=edit" type="button" class="btn btn-outline-primary btn-sm">Edit</a><span hx-delete="{% url 'configfiles:delete_project' item_id %}" hx-target="#project-list" {% if confirm_delete == True %}hx-confirm="Confirm?" {% endif %} type="button" class="btn btn-outline-danger btn-sm ">Delete</span></div></td>
+    </tr>
+</div>

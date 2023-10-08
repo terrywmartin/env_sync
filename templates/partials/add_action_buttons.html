@@ -4,7 +4,7 @@
 </div>
 {% else %}
 <div class="action-buttons align-items-center">
-    <form id="locationForm" class="row align-items-center" hx-post="{% url create_view %}" hx-target="{{ list_target }}">
+    <form id="{{ form_id }}" class="row align-items-center" hx-post="{% url create_view %}" hx-target="{{ list_target }}">
         {% csrf_token %}
         <div class="col-7 col-sm-7 col-md-5 col-lg-5">
             <input id="formInput1" type="text" name={{ input_name }} class="form-control mr-2" placeholder="{{placeholder_text}}" /> 

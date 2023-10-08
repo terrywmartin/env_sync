@@ -1,0 +1,10 @@
+<table class="table">
+    <thead>
+        {% include 'configfiles\partials\list_header.html' with col1_header='Name' col2_header='' col3_header='' col4_header='' col5_header='' col6_header='' %}
+    </thead>
+    <tbody>
+        {% for project in projects %}
+        {% include 'configfiles\partials\project_item.html' with col1=project.name  col2='' col3='' col4='' col5='' item_id=project.id %}
+        {% endfor %}
+    </tbody>
+</table>

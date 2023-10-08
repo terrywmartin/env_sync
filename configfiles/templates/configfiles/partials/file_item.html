@@ -2,6 +2,8 @@
     
     <td style="border-style: none !important;">{{ file.name }}</td>
     <td style="border-style: none !important;">{{ file.environment }}</td>
-    <td style="border-style: none !important;" class = 'align-middle text-right float-end' ><div class="btn-group" role="group"><a href="{% url view_file location_id=location_id  pk=file.id %}" type="button" class="btn btn-outline-secondary btn-sm">View</a><a href="{% url view_file location_id=location_id pk=file.id %}?mode=edit" type="button" class="btn btn-outline-primary btn-sm">Edit</a><span hx-delete="{% url delete_file location_id=location_id pk=file.id %}" hx-target="#file-list" {% if confirm_delete == True %}hx-confirm="Confirm?" {% endif %} type="button" class="btn btn-outline-danger btn-sm ">Delete</span></div></td>
+    <td style="border-style: none !important;">{{ file.location.name }}</td>
+    <td style="border-style: none !important;"></td>
+    <td style="border-style: none !important;" class = 'align-middle text-right float-end' ><div class="btn-group" role="group"><a href="{% url view_file pk=file.id %}" type="button" class="btn btn-outline-secondary btn-sm">View</a><a href="{% url view_file pk=file.id %}?mode=edit" type="button" class="btn btn-outline-primary btn-sm">Edit</a><span hx-delete="{% url delete_file pk=file.id %}" hx-target="#file-list" {% if confirm_delete == True %}hx-confirm="Confirm?" {% endif %} type="button" class="btn btn-outline-danger btn-sm ">Delete</span></div></td>
 
 </tr>

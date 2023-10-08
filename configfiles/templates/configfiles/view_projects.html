@@ -1,0 +1,28 @@
+{% extends "navbar.html" %}
+{% load static %}
+{% block content %}
+    <!-- Content Start -->
+   
+            <!-- Sale & Revenue Start -->
+            <div class="container-fluid pt-4 px-4">
+                <div class="row g-4">
+                    <div class="card col-sm-8 col-xl-12">
+                    </div>
+                    
+                </div>
+            </div>
+            <!-- Sale & Revenue End -->
+
+        <div class="col-12">
+            <div class="bg-light rounded h-100 p-4" id="location-main">
+                <h6 class="mb-4">Projects</h6>
+                {% include 'partials\add_action_buttons.html'  %}
+                <div id="project-list" class="table-responsive" hx-trigger="load, projectListChanged from:body" hx-get="{% url 'configfiles:get_projects' %}" hx-target="this" >
+                    {% include 'configfiles/partials/project_list.html' %}
+                </div>
+            </div>
+        </div>
+
+</div>        <!-- Content End -->
+{% endblock %}
+

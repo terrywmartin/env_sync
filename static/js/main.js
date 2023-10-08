@@ -29,4 +29,9 @@
       document.getElementById("locationForm").reset()
       document.getElementById("formInput1").focus()
     }
+
+    if (e.detail.target.id == "project-list") {
+        document.getElementById("projectForm").reset()
+        document.getElementById("formInput1").focus()
+      }
   })

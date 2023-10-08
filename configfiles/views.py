@@ -4,8 +4,8 @@ from django.http import Http404, HttpResponse
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.mixins import LoginRequiredMixin, PermissionRequiredMixin
 
-from .forms import LocationModelForm
-from .models import Location, File
+from .forms import LocationModelForm, ConfigFileModelForm
+from .models import Location, File, ConfigFile
 from users.models import User
 
 # Create your views here.
@@ -17,6 +17,53 @@ class Index(View):
         }
         return render(request, 'configfiles/index.html', context)
  """
+
+class ConfigFilesProjects(LoginRequiredMixin, View):
+    def get(self, request):
+        projects = ConfigFile.objects.filter(user=request.user)
+
+        form = ConfigFileModelForm()
+
+        context = {
+            'model_name': 'Location',
+            #'create_view': 'configfiles:create_location',
+            'create_view': 'configfiles:add_project',
+            'modal_target': 'project_modal',
+            'list_target': '#project-list',
+            'input_name': 'project_name',
+            'placeholder_text': 'Enter a project',
+            'button_text': 'Add project',
+            'projects': projects,
+            'form': form,
+            'add_form': True,
+            'form_id': 'projectForm',
+        }
+        return render(request, 'configfiles/view_projects.html', context)
+    
+    
+    def post(self, request):
+        pass
+
+class ConfigFilesProject(LoginRequiredMixin, View):
+    def get(self, request, pk):
+        mode = request.GET.get('mode', None)
+        if mode is None:
+            mode = 'view'
+
+        project = ConfigFile.objects.get(id=pk)
+        files = File.objects.filter(config=project)
+
+        context = {
+            'mode': mode,
+            'project': project,
+            'files': files,    
+            'view_file': 'configfiles:view_file',
+            'edit_file': 'configfiles:edit_file',
+            'delete_file': 'configfiles:delete_file',
+        }
+        return render(request, 'configfiles/view_project.html', context)
+
+
 class ConfigFilesLocations(LoginRequiredMixin, View):
     def get(self, request):
         
@@ -33,7 +80,8 @@ class ConfigFilesLocations(LoginRequiredMixin, View):
             'button_text': 'Add location',
             'locations': locations,
             'form': form,
-            'add_form': True
+            'add_form': True,
+            'form_id': 'loactionForm',
         }
         return render(request, 'configfiles/view_locations.html', context)
     
@@ -77,11 +125,13 @@ class ConfigFilesFiles(LoginRequiredMixin, View):
             'form': form,
             'add_form': True
         }
-        return render(request, 'configfiles/view_locations.html', context)
+        return render(request, 'configfiles/files.html', context)
     
- 
-class ConfigFilesLocationFile(LoginRequiredMixin, View):
-    def get(self, request, location_id, pk):
+class ConfigFilesAddFile(LoginRequiredMixin, View):
+    def get(self, request):
+        pass
+class ConfigFilesFile(LoginRequiredMixin, View):
+    def get(self, request, pk):
 
         mode = request.GET.get('mode', None)
         if mode is None:
@@ -94,6 +144,77 @@ class ConfigFilesLocationFile(LoginRequiredMixin, View):
             'files': file,    
         }
         return render(request, 'configfiles/view_location.html', context)
+
+@login_required(login_url='login')
+def upload_file(request):
+    pass
+
+@login_required(login_url='login') 
+def get_projects(request):
+    if request.htmx == False:
+        return Http404
+    
+    if request.user == None:
+        return Http404
+    
+    projects = ConfigFile.objects.filter(user=request.user)
+        
+    context = {
+        'projects': projects
+    }
+    return render(request, 'configfiles\partials\project_list.html', context)
+
+
+@login_required(login_url='login')
+def create_project(request):
+    if request.htmx == False:
+        return Http404
+    
+    if request.user == None:
+        return Http404
+    print(request.POST)
+    project_name = request.POST.get('project_name', None)
+    if project_name != None:
+        project = ConfigFile(name=project_name, user=request.user)
+        project.save()
+    
+     #return render(request, 'configfiles/partials/location_list.html', context)
+    return HttpResponse(status=201, headers={'HX-Trigger': 'projectListChanged'})
+
+@login_required(login_url='login')  
+def delete_project(request,pk):
+    
+    if request.htmx == False:
+        return Http404
+    
+    if request.user == None:
+        return Http404
+    
+    project = ConfigFile.objects.get(id=pk)
+    project.delete()
+
+    #return render(request, 'configfiles/partials/location_list.html', context)
+    return HttpResponse(status=204, headers={'HX-Trigger': 'projectListChanged'})
+
+@login_required(login_url='login') 
+def get_project_files(request, project_id):
+    if request.htmx == False:
+        return Http404
+    
+    if request.user == None:
+        return Http404
+    project = ConfigFile.objects.get(id=project_id)
+    files = File.objects.filter(config=project)
+        
+    context = {
+        'files': files,
+        'project': project,
+        'view_file': 'configfiles:view_file',
+        'edit_file': 'configfiles:edit_file',
+        'delete_file': 'configfiles:delete_file',
+    }
+    return render(request, 'configfiles/partials/file_list.html', context)
+
 
 @login_required(login_url='login') 
 def get_locations(request):
@@ -154,14 +275,14 @@ def get_location_files(request, location_id):
     context = {
         'files': files,
         'location': location,
-        'view_file': 'configfiles:view_location_file',
-        'edit_file': 'configfiles:edit_location_file',
-        'delete_file': 'configfiles:delete_location_file',
+        'view_file': 'configfiles:view_file',
+        'edit_file': 'configfiles:edit_file',
+        'delete_file': 'configfiles:delete_file',
     }
     return render(request, 'configfiles/partials/file_list.html', context)
 
 @login_required(login_url='login')  
-def delete_location_file(request, location_id, pk):
+def delete_file(request, location_id, pk):
     
     if request.htmx == False:
         return Http404

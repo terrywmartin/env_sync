@@ -38,6 +38,7 @@ class File(models.Model):
 
     config = models.ForeignKey(ConfigFile,on_delete=models.CASCADE,null=True,blank=True)
     location = models.ForeignKey(Location, on_delete=models.CASCADE, null=True, blank=True)
+    user = models.ForeignKey(User, on_delete=models.CASCADE, null=True,blank=True)
 
     def __str__(self):
         return self.name

@@ -1,0 +1,79 @@
+{% extends "navbar.html" %}
+{% load static %}
+{% block content %}
+
+{% csrf_token %}
+
+<form hx-post="{{ url }}" hx-trigger="submit"
+      hx-encoding="multipart/form-data"
+      id="form"
+>
+    {% for field, value in fields.items %}
+    <input type="hidden" name="{{ field }}" value="{{ value }}">
+    {% endfor %}
+
+    <input type="file" name="file" id="file-input"
+           hx-post="{% url 'configfiles:uploader' %}"
+           hx-include="[name='csrfmiddlewaretoken']"
+           hx-target="#form"
+           hx-select="#form"
+           hx-swap="outerHTML"
+           hx-trigger="change"
+           hx-preserve="true"
+    >
+
+    <div id="progress-display" >
+        <progress id='progress' value='0' max='100'></progress>
+        <div id="percent-wrapper">
+            <input id='percent' value="0" type="number" contenteditable="false" disabled/>
+            <span>%</span>
+        </div>
+    </div>
+
+    <button type="submit" id="upload-btn">
+        <span id="start-upload">Upload</span>
+        <span id="loader">Uploading...</span>
+    </button>
+
+    <div id="upload-path">
+        Uploaded {{ path }}
+    </div>
+</form>
+
+<script>
+    htmx.on('htmx:xhr:progress', function (evt) {
+        if (evt.detail.elt.id === 'form') {
+            console.log("evt.detail = ", evt.detail)
+            const progressValue = evt.detail.loaded / evt.detail.total * 100;
+            htmx.find('#progress').setAttribute('value', progressValue);
+            htmx.find('#percent').setAttribute('value', Math.round(progressValue));
+        }
+    });
+
+    htmx.on('htmx:beforeRequest', (evt) => {
+        if (evt.detail.elt.id === 'form') {
+            htmx.find('#start-upload').style.display = 'none';
+            htmx.find('#loader').style.display = 'block';
+            htmx.find('#upload-path').style.visibility = 'hidden';
+            htmx.find('#percent-wrapper').style.visibility = 'visible';
+        }
+    });
+
+    htmx.on('htmx:configRequest', (evt) => {
+        if (evt.detail.elt.id === 'form') {
+            event.detail.headers = []; // We clear the headers due to a bug in htmx: https://github.com/bigskysoftware/htmx/issues/779#issuecomment-1019373147
+        }
+    });
+
+    htmx.on('htmx:afterOnLoad', (evt) => {
+        if (evt.detail.elt.id === 'form') {
+            htmx.find('#loader').style.display = 'none';
+            htmx.find('#upload-path').style.visibility = 'visible';
+            htmx.find('#start-upload').style.display = 'block';
+        }
+    });
+</script>
+
+
+
+{% endblock %}
