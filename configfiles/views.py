@@ -1,4 +1,5 @@
 from django.shortcuts import render, redirect
+from django.urls import reverse
 from django.views import View
 from django.http import Http404, HttpResponse
 from django.contrib.auth.decorators import login_required
@@ -57,9 +58,12 @@ class ConfigFilesProject(LoginRequiredMixin, View):
             'mode': mode,
             'project': project,
             'files': files,    
+            'location_id': None,
+            'project_id': project.id,
             'view_file': 'configfiles:view_file',
             'edit_file': 'configfiles:edit_file',
             'delete_file': 'configfiles:delete_file',
+            'next': reverse('configfiles:view_project', args=[project.id])
         }
         return render(request, 'configfiles/view_project.html', context)
 
@@ -99,10 +103,13 @@ class ConfigFilesLocation(LoginRequiredMixin, View):
         context = {
             'mode': mode,
             'location': location,
-            'files': files,    
-            'view_file': 'configfiles:view_location_file',
-            'edit_file': 'configfiles:edit_location_file',
-            'delete_file': 'configfiles:delete_location_file',
+            'files': files,  
+            'location_id': location.id,
+            'project_id' : None,  
+            'view_file': 'configfiles:view_file',
+            'edit_file': 'configfiles:edit_file',
+            'delete_file': 'configfiles:delete_file',
+            'next': reverse('configfiles:view_location', args=[location.id])
         }
         return render(request, 'configfiles/view_location.html', context)
 
@@ -121,15 +128,51 @@ class ConfigFilesFiles(LoginRequiredMixin, View):
             'input_name': 'location_name',
             'placeholder_text': 'Enter a location',
             'button_text': 'Add location',
+            'location_id': None,
+            'project_id': None,
             'locations': files,
             'form': form,
-            'add_form': True
+            'add_form': True,
+        
         }
         return render(request, 'configfiles/files.html', context)
     
 class ConfigFilesAddFile(LoginRequiredMixin, View):
     def get(self, request):
-        pass
+        location_id = request.GET.get('location_id', None)
+        project_id = request.GET.get('project_id', None)
+        next = request.GET.get('next', None)
+        """  if location_id:
+            location = Location.objects.filter(id=location_id)
+            locations = [ location ]
+        else:
+            locations = Location.objects.filter(user=request.user) 
+        """
+        locations = Location.objects.filter(user=request.user)
+        """ if project_id:
+            project = ConfigFile.objects.filter(id=project_id)
+            projects = [ project ]
+        else:
+            projects = ConfigFile.objects.filter(user=request.user) """
+        projects = ConfigFile.objects.filter(user=request.user)
+        
+        context = {
+            'location_id':  location_id,
+            'project_id': project_id,
+            'projects':   projects,
+            'locations': locations,
+            'next': next,
+        }
+        return render(request, 'configfiles/upload_file.html', context)
+    
+    def post(self, request):
+        print(request)
+        print(request.POST)
+        print(request.FILES)
+        next = request.GET.get('next', 'configfiles:view_files')
+        print(next)
+        return redirect(next)
+
 class ConfigFilesFile(LoginRequiredMixin, View):
     def get(self, request, pk):
 
@@ -203,15 +246,18 @@ def get_project_files(request, project_id):
     
     if request.user == None:
         return Http404
+    
     project = ConfigFile.objects.get(id=project_id)
     files = File.objects.filter(config=project)
-        
+    print( request.GET.get('next', None))
     context = {
         'files': files,
         'project': project,
+        'project_id': project.id,
         'view_file': 'configfiles:view_file',
         'edit_file': 'configfiles:edit_file',
         'delete_file': 'configfiles:delete_file',
+        'next': request.GET.get('next', None)
     }
     return render(request, 'configfiles/partials/file_list.html', context)
 
@@ -275,9 +321,12 @@ def get_location_files(request, location_id):
     context = {
         'files': files,
         'location': location,
+        'location_id': location.id,
         'view_file': 'configfiles:view_file',
         'edit_file': 'configfiles:edit_file',
         'delete_file': 'configfiles:delete_file',
+        'next': request.GET.get('next', None)
+
     }
     return render(request, 'configfiles/partials/file_list.html', context)
 

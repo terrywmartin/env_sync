@@ -29,7 +29,7 @@ urlpatterns = [
     path('files/<uuid:pk>/delete', views.delete_file, name='delete_file'),
     path('files/<uuid:pk>', views.ConfigFilesFile.as_view(), name='view_file'),
     path('files/add', views.ConfigFilesAddFile.as_view(), name='add_file'),
-    path('files/upload', views.upload_file, name='uploader'),
+    path('files/upload', views.upload_file, name='upload_file'),
 
 
 ]

@@ -1,0 +1,46 @@
+{% extends "navbar.html" %}
+{% load static %}
+{% block content %}
+
+
+<div class="col-7">
+    <div class="bg-light rounded h-100 p-4">
+        <form action="{% url 'configfiles:add_file' %}?next={{next}}" method="POST" enctype="multipart/form-data" id="form" >
+            {% csrf_token %}
+            <div class="col-12">
+                <input type="text" name="name" class="form-control" id="name" autofocus placeholder="Name">
+            </div>
+            <br>
+            <div > 
+                <select class="form-select form-select mb-3" aria-label=".form-select-sm example" id="location" name="location">
+                    <option >Select Location</option>
+                    {% for location in locations %}
+                    <option value="{{location.id}}" {% if location.id|stringformat:"s"  == location_id %}selected{% endif %}>{{ location.name }}</option>
+                    {% endfor %}
+                </select>
+            </div>
+            <br>
+            <div > 
+                <select class="form-select form-select mb-3" aria-label=".form-select-sm example" id="environment" name="environment">
+                    <option >Environment</option>
+                    <option value="Development">Development</option>
+                    <option value="Development">Staging</option>
+                    <option value="Development">Production</option>
+
+                </select>
+            </div>
+            <br>
+            <label for="formFileSm" class="form-label">Select .env file</label>
+            <input class="form-control form-control-sm" id="file-input" type="file" name="file" />
+            <br>
+            <button type="submit" id="upload-btn"  class="btn btn-primary btn-sm py-2 w-100 mb-2">Upload</button>
+            <a class="btn btn-secondary py-2 w-100 mb-2"  href="{{next}}">Go Back</a>
+            
+        </form>
+
+
+        </div>
+    </div>
+</div>
+
+{% endblock %}

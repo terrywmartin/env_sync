@@ -20,7 +20,7 @@
                     <br><br>
                     <h4>Files</h4>
                     <br>
-                    <div id="file-list" class="table-responsive" hx-trigger="load, fileListChanged from:body" hx-get="{% url 'configfiles:get_project_files' project_id=project.id %}" hx-target="this" >
+                    <div id="file-list" class="table-responsive" hx-trigger="load, fileListChanged from:body" hx-get="{% url 'configfiles:get_project_files' project_id=project.id %}?next={{next}}" hx-target="this" >
                     {% include 'configfiles/partials/file_list.html' %}
                     </div>
                 </div>
