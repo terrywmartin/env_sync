@@ -3,7 +3,7 @@
 
 {% include 'head.html' %}
 
-<body style="height: 100vh;" class="bg-light {% if user.is_authenticated == False %}open{% endif %}">
+<body style="height: 75vh;" class="bg-light {% if user.is_authenticated == False %}open{% endif %}">
 <div class="container-xxl position-relative bg-light d-flex p-0">
         <!-- Spinner Start -->
         <div id="spinner" class="show bg-light position-fixed translate-middle w-100 vh-100 top-50 start-50 d-flex align-items-center justify-content-center">
@@ -21,7 +21,7 @@
  
    {% block navbar %}{% endblock %}
       
-    <div style="height: 100vh;" class="container-fluid pt-4 px-4">
+    <div style="height: 80vh;" class="container-fluid pt-4 px-4">
 
     {% comment %} <section class="section"> {% endcomment %}
         {% include 'partials/messages.html' %}
