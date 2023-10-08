@@ -1,0 +1,14 @@
+<table class="table">
+    <thead>
+        {% include 'configfiles\partials\list_header.html' with col1_header=col1_header col2_header=col2_header col3_header=col3_header col4_header=col4_header col5_header=col5_header col6_header=col6_header %}
+    </thead>
+    <tbody>
+        {% for item in items %}
+        {% if item.environment %}
+            {% include 'configfiles\partials\item.html' with col1=item.name  col2=item.location col3=item.environment col4='' col5='' item_id=item.id %}
+        {% else %}
+            {% include 'configfiles\partials\item.html' with col1=item.name  col2='' col3='' col4='' col5='' item_id=item.id %}
+        {% endif %}
+        {% endfor %}
+    </tbody>
+</table>

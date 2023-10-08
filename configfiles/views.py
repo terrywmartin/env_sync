@@ -24,7 +24,7 @@ class ConfigFilesProjects(LoginRequiredMixin, View):
         projects = ConfigFile.objects.filter(user=request.user)
 
         form = ConfigFileModelForm()
-
+        
         context = {
             'model_name': 'Location',
             #'create_view': 'configfiles:create_location',
@@ -38,6 +38,14 @@ class ConfigFilesProjects(LoginRequiredMixin, View):
             'form': form,
             'add_form': True,
             'form_id': 'projectForm',
+            'view_url': 'configfiles:view_project',
+            'delete_url': 'configfiles:delete_project',
+            'col1_header': 'Name',
+            'col2_header': '',
+            'col3_header': '',
+            'col4_header': '',
+            'col5_header': '',
+            'col6_header': '',
         }
         return render(request, 'configfiles/view_projects.html', context)
     
@@ -63,7 +71,9 @@ class ConfigFilesProject(LoginRequiredMixin, View):
             'view_file': 'configfiles:view_file',
             'edit_file': 'configfiles:edit_file',
             'delete_file': 'configfiles:delete_file',
-            'next': reverse('configfiles:view_project', args=[project.id])
+            'next': reverse('configfiles:view_project', args=[project.id]),
+            'view_url': 'configfiles:view_project',
+            'delete_url': 'configfiles:delete_project',
         }
         return render(request, 'configfiles/view_project.html', context)
 
@@ -103,13 +113,15 @@ class ConfigFilesLocation(LoginRequiredMixin, View):
         context = {
             'mode': mode,
             'location': location,
-            'files': files,  
+            'items': files,  
             'location_id': location.id,
             'project_id' : None,  
             'view_file': 'configfiles:view_file',
             'edit_file': 'configfiles:edit_file',
             'delete_file': 'configfiles:delete_file',
-            'next': reverse('configfiles:view_location', args=[location.id])
+            'next': reverse('configfiles:view_location', args=[location.id]),
+            'view_url': 'configfiles:view_project',
+            'delete_url': 'configfiles:delete_project',
         }
         return render(request, 'configfiles/view_location.html', context)
 
@@ -184,7 +196,9 @@ class ConfigFilesFile(LoginRequiredMixin, View):
 
         context = {
             'mode': mode,
-            'files': file,    
+            'items': file, 
+            'view_url': 'configfiles:view_file',
+            'delete_url': 'configfiles:delete_file'   
         }
         return render(request, 'configfiles/view_location.html', context)
 
@@ -203,9 +217,19 @@ def get_projects(request):
     projects = ConfigFile.objects.filter(user=request.user)
         
     context = {
-        'projects': projects
+        'items': projects,
+        'view_url': 'configfiles:view_project',
+        'delete_url': 'configfiles:delete_project',
+        'col1_header': 'Name',
+        'col2_header': '',
+        'col3_header': '',
+        'col4_header': '',
+        'col5_header': '',
+        'col6_header': '',
+        
+
     }
-    return render(request, 'configfiles\partials\project_list.html', context)
+    return render(request, 'configfiles\partials\list.html', context)
 
 
 @login_required(login_url='login')
@@ -249,17 +273,24 @@ def get_project_files(request, project_id):
     
     project = ConfigFile.objects.get(id=project_id)
     files = File.objects.filter(config=project)
-    print( request.GET.get('next', None))
     context = {
-        'files': files,
+        'items': files,
         'project': project,
         'project_id': project.id,
         'view_file': 'configfiles:view_file',
         'edit_file': 'configfiles:edit_file',
         'delete_file': 'configfiles:delete_file',
-        'next': request.GET.get('next', None)
+        'next': request.GET.get('next', None),
+        'view_url': 'configfiles:view_location',
+        'delete_url': 'configfiles:delete_location',
+        'col1_header': 'Name',
+        'col2_header': 'Location',
+        'col3_header': 'Environment',
+        'col4_header': '',
+        'col5_header': '',
+        'col6_header': '',
     }
-    return render(request, 'configfiles/partials/file_list.html', context)
+    return render(request, 'configfiles/partials/list.html', context)
 
 
 @login_required(login_url='login') 
@@ -273,9 +304,17 @@ def get_locations(request):
     locations = Location.objects.filter(user=request.user)
         
     context = {
-        'locations': locations
+        'items': locations,
+        'view_url': 'configfiles:view_location',
+        'delete_url': 'configfiles:delete_location',
+        'col1_header': 'Name',
+        'col2_header': '',
+        'col3_header': '',
+        'col4_header': '',
+        'col5_header': '',
+        'col6_header': '',
     }
-    return render(request, 'configfiles\partials\location_list.html', context)
+    return render(request, 'configfiles\partials\list.html', context)
 
 @login_required(login_url='login')  
 def delete_location(request,pk):
@@ -317,18 +356,25 @@ def get_location_files(request, location_id):
         return Http404
     location = Location.objects.get(id=location_id)
     files = File.objects.filter(location=location)
-        
     context = {
-        'files': files,
+        'items': files,
         'location': location,
         'location_id': location.id,
         'view_file': 'configfiles:view_file',
         'edit_file': 'configfiles:edit_file',
         'delete_file': 'configfiles:delete_file',
-        'next': request.GET.get('next', None)
+        'next': request.GET.get('next', None),
+        'view_url': 'configfiles:view_file',
+        'delete_url': 'configfiles:delete_file',
+        'col1_header': 'Name',
+        'col2_header': 'Location',
+        'col3_header': 'Environment',
+        'col4_header': '',
+        'col5_header': '',
+        'col6_header': '',
 
     }
-    return render(request, 'configfiles/partials/file_list.html', context)
+    return render(request, 'configfiles/partials/list.html', context)
 
 @login_required(login_url='login')  
 def delete_file(request, location_id, pk):

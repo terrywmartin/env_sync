@@ -8,8 +8,8 @@
                     <br><br>
                     <h4>Files</h4>
                     <br>
-                    <div id="file-list" class="table-responsive" hx-trigger="load, fileListChanged from:body" hx-get="{% url 'configfiles:get_location_files' location_id=location.id %}?next={{next}}" hx-target="this" >
-                    {% include 'configfiles/partials/file_list.html' %}
+                    <div id="item-list" class="table-responsive" hx-trigger="load, fileListChanged from:body" hx-get="{% url 'configfiles:get_location_files' location_id=location.id %}?next={{next}}" hx-target="this" >
+                    {% include 'configfiles/partials/list.html' %}
                     </div>
             </div>
         </div>

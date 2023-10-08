@@ -6,7 +6,7 @@
                 <h6 class="mb-4">Locations</h6>
                 {% include 'partials\add_action_buttons.html'  %}
                 <div id="location-list" class="table-responsive" hx-trigger="load, locationListChanged from:body" hx-get="{% url 'configfiles:get_locations' %}" hx-target="this" >
-                    {% include 'configfiles/partials/location_list.html' %}
+                    {% include 'configfiles/partials/list.html' %}
                 </div>
             </div>
         </div>

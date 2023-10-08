@@ -6,7 +6,7 @@
                 <h6 class="mb-4">Projects</h6>
                 {% include 'partials\add_action_buttons.html'  %}
                 <div id="project-list" class="table-responsive" hx-trigger="load, projectListChanged from:body" hx-get="{% url 'configfiles:get_projects' %}" hx-target="this" >
-                    {% include 'configfiles/partials/project_list.html' %}
+                    {% include 'configfiles/partials/list.html' with items=projects %}
                 </div>
             </div>
         </div>
